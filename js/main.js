@@ -319,3 +319,122 @@
 // }
 // getUsers();
 
+// console.log("Optional Chaining");
+// const user1={
+//     name:"Андрей",
+//     address:{
+//         city: "Волжский",
+//         street:"Пушкина",
+//     },
+// };
+
+// const user2 ={
+//     name: "Дмитрий",
+// };
+
+// const city2= user2.address?.city;
+// console.log("Город (новый способ):" , city2);
+
+// const street = uwer1.address?.street;
+// console.log("Улица:", street);
+
+// const admin ={
+//     name:"Администратор",
+//     Permissions:{
+//         canDelete:()=> true,
+//     },
+// };
+
+// const guest ={
+//     name: "гость",
+// };
+
+// console.log("Админ может удалять?", admin.permissions?.
+//     canDelete?.());
+// console.log("Гость может удалять?", guest.permissions?.Permissions?.
+//     canDelet?.());
+
+// const company={
+//     name: "Tesh Corp",
+//     employees:[
+//         {name: "Надежда", role: "Developer"},
+//         {name: "Анна", role: "Desinger"},
+//     ],
+// };
+// const startup ={
+//     name: "New Startup",
+// }
+// console.log("Первый сотрудник:", company.employees?.
+//     [0]?.name);
+// console.log("Первый сотрудник стартапа:", startup.
+//     employees?.[0]?.name);
+
+// console.log("Nullish Coalescing");
+
+// const value1 =0;
+// const value2 ="";
+// const value3 =false;
+// const value4 =null;
+// const value5 = undefined;
+
+// console.log('value1 || "default":', value1 || "default");
+// console.log('value2 || "default":', value2 || "default");
+// console.log('value3 || "default":', value3 || "default");
+
+// console.log('value1 ?? "default":', value1 ?? "default");
+// console.log('value2 ?? "default":', value2 ?? "default");
+// console.log('value3 ?? "default":', value3 ?? "default");
+
+// function displayUserSettings(settings){
+//     const theme = settings?.theme ?? "light";
+//     const fontSize = settings?.notifications ?? true;
+
+//     console.log("Настройки пользователя:");
+//     console.log("Тема:", theme);
+//     console.log("размер шрифта", fontSize);
+//     console.log("Уведомления:", notifications);
+// }
+
+// displayUserSettings({theme:"dark", fontSize: 16});
+// displayUserSettings({notifications: false});
+// displayUserSettings({});
+
+// const apiResponse={
+//     data:{
+//         user:{
+//             profile:{
+//                 settings:{
+//                     language:"ru",
+//                 },
+//             },
+//         },
+//     },
+// };
+// const language = apiResponse?.data?.user?.profile?.
+// settings?.language ?? "en";
+// console.log("Язык по умолчанию:", defaultLanguage);
+
+const fullOrder = {
+        customer: {
+            name: "Анна Назаренко",
+            email: "anna@example.com"
+        },
+        shipping: {
+            address: "ул. Ленина, д. 10",
+            city: "Волжский"
+        },
+        payment: {
+            method: "Банковская карта",
+            status: "Оплачено"
+        },
+        total: 5250
+    };
+    
+    const partialOrder = {
+        customer: {
+            name: "Борщ Борщевич"
+        },
+        total: 3200
+    };
+    
+    const emptyOrder = {};
