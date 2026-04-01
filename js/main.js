@@ -414,27 +414,127 @@
 // settings?.language ?? "en";
 // console.log("Язык по умолчанию:", defaultLanguage);
 
-const fullOrder = {
-        customer: {
-            name: "Анна Назаренко",
-            email: "anna@example.com"
-        },
-        shipping: {
-            address: "ул. Ленина, д. 10",
-            city: "Волжский"
-        },
-        payment: {
-            method: "Банковская карта",
-            status: "Оплачено"
-        },
-        total: 5250
-    };
+// const fullOrder = {
+//         customer: {
+//             name: "Анна Назаренко",
+//             email: "anna@example.com"
+//         },
+//         shipping: {
+//             address: "ул. Ленина, д. 10",
+//             city: "Волжский"
+//         },
+//         payment: {
+//             method: "Банковская карта",
+//             status: "Оплачено"
+//         },
+//         total: 5250
+//     };
     
-    const partialOrder = {
-        customer: {
-            name: "Борщ Борщевич"
-        },
-        total: 3200
-    };
+//     const partialOrder = {
+//         customer: {
+//             name: "Борщ Борщевич"
+//         },
+//         total: 3200
+//     };
     
-    const emptyOrder = {};
+//     const emptyOrder = {};
+
+
+class SimpleCurrencyConverter {
+    constructor() {
+        this.rates = {
+            'USD': 1,    
+            'EUR': 0.92,   
+            'RUB': 92.5,   
+            'GBP': 0.79,   
+            'CNY': 7.23    
+        };
+    }
+    convert(amount, fromCurrency, toCurrency) {
+        if (!amount || amount === '') {
+            return { success: false, message: 'Введите сумму' };
+        }
+        const numAmount = parseFloat(amount);
+        if (isNaN(numAmount)) {
+            return { success: false, message: 'Введите корректное число' };
+        }
+        
+        if (numAmount <= 0) {
+            return { success: false, message: 'Сумма должна быть больше 0' };
+        }
+        const amountInUSD = numAmount / this.rates[fromCurrency];
+        const result = amountInUSD * this.rates[toCurrency];
+        
+        return {
+            success: true,
+            amount: numAmount,
+            from: fromCurrency,
+            to: toCurrency,
+            result: result.toFixed(2)
+        };
+    }
+    getCurrencyName(code) {
+        const names = {
+            'USD': 'Доллар США',
+            'EUR': 'Евро',
+            'RUB': 'Российский рубль',
+            'GBP': 'Британский фунт',
+            'CNY': 'Китайский юань'
+        };
+        return names[code] || code;
+    }
+}
+const currencyConverter = new SimpleCurrencyConverter();
+function updateResult() {
+    const amount = document.getElementById('amount').value;
+    const fromCurrency = document.getElementById('fromCurrency').value;
+    const toCurrency = document.getElementById('toCurrency').value;
+    const resultDiv = document.getElementById('result');
+    const errorDiv = document.getElementById('error');
+    errorDiv.textContent = '';
+    resultDiv.innerHTML = '';
+    const conversion = currencyConverter.convert(amount, fromCurrency, toCurrency);
+    if (conversion.success) {
+        const fromName = currencyConverter.getCurrencyName(conversion.from);
+        const toName = currencyConverter.getCurrencyName(conversion.to);
+        
+        resultDiv.innerHTML = `
+            <strong>${conversion.amount} ${fromName} (${conversion.from}) =</strong><br>
+            <span style="font-size: 28px; color: #27ae60;">${conversion.result} ${toName} (${conversion.to})</span>
+        `;
+    } else {
+        errorDiv.textContent = conversion.message;
+    }
+}
+function resetForm() {
+    document.getElementById('amount').value = '';
+    document.getElementById('fromCurrency').value = 'USD';
+    document.getElementById('toCurrency').value = 'RUB';
+    document.getElementById('result').innerHTML = '';
+    document.getElementById('error').textContent = '';
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const amountInput = document.getElementById('amount');
+    const fromSelect = document.getElementById('fromCurrency');
+    const toSelect = document.getElementById('toCurrency');
+    const convertBtn = document.getElementById('convertBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    convertBtn.addEventListener('click', updateResult);
+    resetBtn.addEventListener('click', resetForm);
+    amountInput.addEventListener('input', updateResult);
+    fromSelect.addEventListener('change', updateResult);
+    toSelect.addEventListener('change', updateResult);
+    amountInput.addEventListener('keypress', function(e) {
+        const char = String.fromCharCode(e.which);
+        if (!/[0-9.]/.test(char)) {
+            e.preventDefault();
+        }
+    });
+    amountInput.addEventListener('input', function() {
+        if ((this.value.match(/\./g) || []).length > 1) {
+            this.value = this.value.slice(0, -1);
+        }
+    });
+    console.log('Конвертер валют загружен!');
+    console.log('Доступные курсы:', currencyConverter.rates);
+});
